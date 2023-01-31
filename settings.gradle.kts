@@ -1,1 +1,1 @@
-rootProject.name = "MongoDB_SpringData_Reactivo"
+rootProject.name = "tennislab-MongoDB-SpringData-Reactivo"
