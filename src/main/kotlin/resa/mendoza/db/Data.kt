@@ -3,8 +3,7 @@ package resa.mendoza.db
 /**
  * @author Mario Resa y Sebastián Mendoza
  */
-import resa.mendoza.models.Producto
-import resa.mendoza.models.Tipo
+import resa.mendoza.models.*
 
 fun getProductoInit() = listOf(
     Producto(
@@ -31,34 +30,33 @@ fun getProductoInit() = listOf(
 //        producto = getProductoInit()[1],
 //    ),
 //)
-//
-//fun getEncordaciones() = listOf(
-//    Encordar(
-//        informacionEndordado = "Dato1"
-//    ),
-//    Encordar(
-//        informacionEndordado = "Dato2"
-//    )
-//)
-//
-//fun getPersonalizaciones() = listOf(
-//    Personalizar(
-//        informacionPersonalizacion = "Dato1"
-//    ),
-//    Personalizar(
-//        informacionPersonalizacion = "Dato2"
-//    )
-//)
-//
-//fun getRaquetasInit() = listOf(
-//    Raqueta(
-//        descripcion = "Wilson Burn"
-//    ),
-//    Raqueta(
-//        descripcion = "Babolat Pure Aero"
-//    )
-//)
-//
+fun getEncordaciones() = listOf(
+    Encordar(
+        informacionEndordado = "Dato1"
+    ),
+    Encordar(
+        informacionEndordado = "Dato2"
+    )
+)
+
+fun getPersonalizaciones() = listOf(
+    Personalizar(
+        informacionPersonalizacion = "Dato1"
+    ),
+    Personalizar(
+        informacionPersonalizacion = "Dato2"
+    )
+)
+
+fun getRaquetasInit() = listOf(
+    Raqueta(
+        descripcion = "Wilson Burn"
+    ),
+    Raqueta(
+        descripcion = "Babolat Pure Aero"
+    )
+)
+
 //fun getEncordadorasInit() = listOf(
 //    Encordadora(
 //        descripcion = "Toshiba ABC",

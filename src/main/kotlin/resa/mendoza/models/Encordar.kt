@@ -6,18 +6,15 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
 
-@Document("productos")
-data class Producto(
+@Document("encordaciones")
+data class Encordar(
     @Id
     val id: ObjectId = ObjectId.get(),
     val uuid: UUID = UUID.randomUUID(),
-    val tipo: Tipo,
-    val descripcion: String,
-    val stock: Int,
-    var precio: Double
-){
+    var informacionEndordado: String,
+    val precio: Double = 15.0
+) {
     override fun toString(): String {
         return ObjectMapper().writeValueAsString(this)
     }
 }
-enum class Tipo { RAQUETA, CORDAJE, COMPLEMENTO }

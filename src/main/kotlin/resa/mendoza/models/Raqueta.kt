@@ -4,20 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
-import java.util.*
+import java.util.UUID
 
-@Document("productos")
-data class Producto(
+@Document("raquetas")
+data class Raqueta(
     @Id
     val id: ObjectId = ObjectId.get(),
     val uuid: UUID = UUID.randomUUID(),
-    val tipo: Tipo,
-    val descripcion: String,
-    val stock: Int,
-    var precio: Double
-){
+    val descripcion: String
+) {
     override fun toString(): String {
         return ObjectMapper().writeValueAsString(this)
     }
 }
-enum class Tipo { RAQUETA, CORDAJE, COMPLEMENTO }

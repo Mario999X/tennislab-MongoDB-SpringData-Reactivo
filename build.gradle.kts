@@ -44,8 +44,16 @@ dependencies {
 	ksp("de.jensklingenberg.ktorfit:ktorfit-ksp:1.0.0-beta16")
 	implementation("de.jensklingenberg.ktorfit:ktorfit-lib:1.0.0-beta16")
 
+	// Para serializar en Json con Ktor
+	implementation("io.ktor:ktor-client-serialization:2.1.3")
+	implementation("io.ktor:ktor-client-content-negotiation:2.1.3")
+	implementation("io.ktor:ktor-serialization-kotlinx-json:2.1.3")
+
 	// Cache
 	implementation("io.github.reactivecircus.cache4k:cache4k:0.9.0")
+
+	// Jackson
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.+")
 
 	//Dokka Documentación Kotlin
 	dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")

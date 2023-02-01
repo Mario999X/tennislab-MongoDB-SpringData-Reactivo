@@ -2,6 +2,7 @@ package resa.mendoza.controller
 
 import kotlinx.coroutines.flow.Flow
 import mu.KotlinLogging
+import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import resa.mendoza.models.Producto
@@ -27,7 +28,17 @@ class ProductoController
         return item
     }
 
-    suspend fun productosDeleteAll() {
+    suspend fun getProductoById(id: ObjectId): Producto? {
+        logger.info { "Obteniendo producto con id $id" }
+        return productosRepository.findById(id)
+    }
+
+    suspend fun deleteProducto(entity: Producto) {
+        logger.info { "Borrando producto $entity" }
+        productosRepository.delete(entity)
+    }
+
+    suspend fun resetProductos() {
         logger.info { "Borrando productos" }
         productosRepository.deleteAll()
     }
