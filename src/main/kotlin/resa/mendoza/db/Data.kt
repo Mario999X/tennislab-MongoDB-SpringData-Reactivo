@@ -4,6 +4,9 @@ package resa.mendoza.db
  * @author Mario Resa y Sebastián Mendoza
  */
 import resa.mendoza.models.*
+import resa.mendoza.models.maquina.Encordadora
+import resa.mendoza.models.maquina.Personalizadora
+import java.time.LocalDate
 
 fun getProductoInit() = listOf(
     Producto(
@@ -58,40 +61,40 @@ fun getRaquetasInit() = listOf(
     )
 )
 
-//fun getEncordadorasInit() = listOf(
-//    Encordadora(
-//        descripcion = "Toshiba ABC",
-//        fechaAdquisicion = LocalDate.now().toString(),
-//        numSerie = 120L,
-//        isManual = true,
-//        tensionMax = 23.2,
-//        tensionMin = 20.5
-//    ),
-//    Encordadora(
-//        descripcion = "Vevor",
-//        fechaAdquisicion = LocalDate.now().toString(),
-//        numSerie = 320L,
-//        isManual = true,
-//        tensionMax = 20.2,
-//        tensionMin = 17.5
-//    )
-//)
-//
-//fun getPersonalizadorasInit() = listOf(
-//    Personalizadora(
-//        descripcion = "Toshiba ABC",
-//        fechaAdquisicion = LocalDate.now().toString(),
-//        numSerie = 540L,
-//        maniobrabilidad = true,
-//        balance = false,
-//        rigidez = false
-//    ),
-//    Personalizadora(
-//        descripcion = "Vevor",
-//        fechaAdquisicion = LocalDate.now().toString(),
-//        numSerie = 940L,
-//        maniobrabilidad = true,
-//        balance = true,
-//        rigidez = false
-//    )
-//)
+fun getEncordadorasInit() = listOf(
+    Encordadora(
+        descripcion = "Toshiba ABC",
+        fechaAdquisicion = LocalDate.now().toString(),
+        numSerie = 120L,
+        isManual = true,
+        tensionMax = 23.2,
+        tensionMin = 20.5
+    ),
+    Encordadora(
+        descripcion = "Vevor",
+        fechaAdquisicion = LocalDate.now().toString(),
+        numSerie = 320L,
+        isManual = true,
+        tensionMax = 20.2,
+        tensionMin = 17.5
+    )
+)
+
+fun getPersonalizadorasInit() = listOf(
+    Personalizadora(
+        descripcion = "Toshiba ABC",
+        fechaAdquisicion = LocalDate.now().toString(),
+        numSerie = 540L,
+        maniobrabilidad = true,
+        balance = false,
+        rigidez = false
+    ),
+    Personalizadora(
+        descripcion = "Vevor",
+        fechaAdquisicion = LocalDate.now().toString(),
+        numSerie = 940L,
+        maniobrabilidad = true,
+        balance = true,
+        rigidez = false
+    )
+)

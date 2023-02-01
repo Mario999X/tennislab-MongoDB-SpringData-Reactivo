@@ -6,15 +6,22 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
 
-@Document("encordados")
-data class Encordar(
+@Document
+data class Pedido(
     @Id
     val id: ObjectId = ObjectId.get(),
     val uuid: UUID = UUID.randomUUID(),
-    var informacionEndordado: String,
-    val precio: Double = 15.0
+    var estadoPedido: EstadoPedido,
+    val fechaEntrada: String,
+    val fechaProgramada: String,
+    var fechaSalida: String? = null,
+    var cliente: Usuario,
+    var tareas: List<Tarea>,
+    val precio: Double = tareas.sumOf { it.precio }
 ) {
     override fun toString(): String {
         return ObjectMapper().writeValueAsString(this)
     }
 }
+
+enum class EstadoPedido { RECIBIDO, PROCESANDO, TERMINADO }
