@@ -20,16 +20,17 @@ fun getProductoInit() = listOf(
     )
 )
 
-//fun getAdquisicionInit() = listOf(
-//    Adquisicion(
-//        cantidad = 1,
-//        producto = getProductoInit()[0],
-//    ),
-//    Adquisicion(
-//        cantidad = 2,
-//        producto = getProductoInit()[1],
-//    ),
-//)
+fun getAdquisicionInit() = listOf(
+    Adquisicion(
+        cantidad = 1,
+        producto = getProductoInit()[0],
+    ),
+    Adquisicion(
+        cantidad = 2,
+        producto = getProductoInit()[1],
+    ),
+)
+
 fun getEncordaciones() = listOf(
     Encordar(
         informacionEndordado = "Dato1"

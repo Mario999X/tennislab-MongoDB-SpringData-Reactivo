@@ -75,7 +75,7 @@ class UsuarioController
         } else {
             userSearch = usuariosMongoRepository.findById(id)
             if (userSearch != null) {
-                println("Usuario no encontrado")
+                println("Usuario encontrado")
 
             } else System.err.println("Usuario no encontrado")
         }

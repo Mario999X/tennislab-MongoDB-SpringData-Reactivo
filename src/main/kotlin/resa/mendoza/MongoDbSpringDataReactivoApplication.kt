@@ -1,6 +1,5 @@
 package resa.mendoza
 
-
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
@@ -9,18 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import resa.mendoza.controller.EncordarController
-import resa.mendoza.controller.PersonalizarController
-import resa.mendoza.controller.ProductoController
-import resa.mendoza.controller.UsuarioController
-import resa.mendoza.db.getEncordaciones
-import resa.mendoza.db.getPersonalizaciones
-import resa.mendoza.db.getProductoInit
-import resa.mendoza.db.getRaquetasInit
-import resa.mendoza.models.Encordar
-import resa.mendoza.models.Perfil
-import resa.mendoza.models.Personalizar
-import resa.mendoza.models.Producto
+import resa.mendoza.controller.*
+import resa.mendoza.db.*
+import resa.mendoza.models.*
+import resa.mendoza.utils.CalculoPrecioTarea
 
 @SpringBootApplication
 class MongoDbSpringDataReactivoApplication
@@ -28,24 +19,28 @@ class MongoDbSpringDataReactivoApplication
     private val productoController: ProductoController,
     private val usuarioController: UsuarioController,
     private val encordarController: EncordarController,
-    private val personalizarController: PersonalizarController
+    private val personalizarController: PersonalizarController,
+    private val adquisicionController: AdquisicionController
 ) : CommandLineRunner {
     override fun run(vararg args: String?): Unit = runBlocking {
         // Listas
         val productosList = mutableListOf<Producto>()
         val encordacionesList = mutableListOf<Encordar>()
         val personalizacionesList = mutableListOf<Personalizar>()
+        val adquisicionesList = mutableListOf<Adquisicion>()
 
         // Obtencion de datos
         val productosInit = getProductoInit()
         val encordacionesInit = getEncordaciones()
         val personalizacionesInit = getPersonalizaciones()
+        val adquisicionInit = getAdquisicionInit()
 
         val clear = launch {
             productoController.resetProductos()
             usuarioController.resetUsuariosMongo()
             encordarController.resetEncordaciones()
             personalizarController.resetPersonalizaciones()
+            adquisicionController.resetAdquisiciones()
         }
         clear.join()
 
@@ -100,6 +95,12 @@ class MongoDbSpringDataReactivoApplication
             personalizarController.getPersonalizaciones().collect { personalizacionesList.add(it) }
             println("Personalizaciones")
             personalizacionesList.forEach { println(it) }
+
+            adquisicionInit.forEach { adquisicionController.createAdquisicion(it) }
+            adquisicionesList.clear()
+            adquisicionController.getAdquisiciones().collect { adquisicionesList.add(it) }
+            println("Adquisiciones")
+            adquisicionesList.forEach { println(it) }
         }
         init.join()
 
@@ -152,6 +153,23 @@ class MongoDbSpringDataReactivoApplication
             val personalizarDelete = personalizarController.getPersonalizacionById(personalizacionesList[0].id)
             personalizarDelete?.let {
                 personalizarController.deletePersonalizacion(it)
+            }
+
+            // Adquisiciones
+            println("\tAdquisiciones")
+            // GetById
+            val adquisicion = adquisicionController.getAdquisicionById(adquisicionesList[1].id)
+            adquisicion?.let { println(it) }
+            // Update
+            adquisicion?.let {
+                it.cantidad += 1
+                it.precio = CalculoPrecioTarea.calculatePrecio(it.producto.precio, null, null) * it.cantidad
+                adquisicionController.createAdquisicion(it)
+            }
+            // Delete
+            val adquisicionDelete = adquisicionController.getAdquisicionById(adquisicionesList[0].id)
+            adquisicionDelete?.let {
+                adquisicionController.deleteAdquisicion(it)
             }
 
         }
