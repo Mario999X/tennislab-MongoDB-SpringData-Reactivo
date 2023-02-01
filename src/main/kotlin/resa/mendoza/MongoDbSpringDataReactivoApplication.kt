@@ -1,6 +1,7 @@
 package resa.mendoza
 
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -11,7 +12,11 @@ import org.springframework.boot.runApplication
 import resa.mendoza.controller.*
 import resa.mendoza.db.*
 import resa.mendoza.models.*
+import resa.mendoza.models.maquina.Encordadora
+import resa.mendoza.models.maquina.Personalizadora
 import resa.mendoza.utils.CalculoPrecioTarea
+import java.time.LocalDateTime
+import kotlin.system.exitProcess
 
 @SpringBootApplication
 class MongoDbSpringDataReactivoApplication
@@ -20,7 +25,11 @@ class MongoDbSpringDataReactivoApplication
     private val usuarioController: UsuarioController,
     private val encordarController: EncordarController,
     private val personalizarController: PersonalizarController,
-    private val adquisicionController: AdquisicionController
+    private val adquisicionController: AdquisicionController,
+    private val tareaController: TareaController,
+    private val pedidoController: PedidoController,
+    private val encordadoraController: MaquinaEncordadoraController,
+    private val personalizadoraController: MaquinaPersonalizadoraController
 ) : CommandLineRunner {
     override fun run(vararg args: String?): Unit = runBlocking {
         // Listas
@@ -28,12 +37,16 @@ class MongoDbSpringDataReactivoApplication
         val encordacionesList = mutableListOf<Encordar>()
         val personalizacionesList = mutableListOf<Personalizar>()
         val adquisicionesList = mutableListOf<Adquisicion>()
+        val maquinaEncordadoraList = mutableListOf<Encordadora>()
+        val maquinaPersonalizadoraList = mutableListOf<Personalizadora>()
 
-        // Obtencion de datos
+        // Obtención de datos
         val productosInit = getProductoInit()
         val encordacionesInit = getEncordaciones()
         val personalizacionesInit = getPersonalizaciones()
         val adquisicionInit = getAdquisicionInit()
+        val encordadoraInit = getEncordadorasInit()
+        val personalizadoraInit = getPersonalizadorasInit()
 
         val clear = launch {
             productoController.resetProductos()
@@ -41,8 +54,18 @@ class MongoDbSpringDataReactivoApplication
             encordarController.resetEncordaciones()
             personalizarController.resetPersonalizaciones()
             adquisicionController.resetAdquisiciones()
+            tareaController.resetTarea()
+            pedidoController.resetPedidos()
+            encordadoraController.resetEncordadoras()
+            personalizadoraController.resetPersonalizadoras()
         }
         clear.join()
+
+        val productosListener = launch {
+            productoController.watchProductos()
+                .onStart { println("Escuchando cambios en Producto...") }
+                .collect { println("Evento: ${it.operationType?.value} -> Producto: ${it.body}") }
+        }
 
         // Usuarios
         println("Usuarios")
@@ -101,6 +124,18 @@ class MongoDbSpringDataReactivoApplication
             adquisicionController.getAdquisiciones().collect { adquisicionesList.add(it) }
             println("Adquisiciones")
             adquisicionesList.forEach { println(it) }
+
+            encordadoraInit.forEach { encordadoraController.createEncordadora(it) }
+            maquinaEncordadoraList.clear()
+            encordadoraController.getEncordadoras().collect { maquinaEncordadoraList.add(it) }
+            println("Máquinas encordadoras")
+            maquinaEncordadoraList.forEach { println(it) }
+
+            personalizadoraInit.forEach { personalizadoraController.createPersonalizadora(it) }
+            maquinaPersonalizadoraList.clear()
+            personalizadoraController.getPersonalizadoras().collect { maquinaPersonalizadoraList.add(it) }
+            println("Máquinas personalizadoras")
+            maquinaPersonalizadoraList.forEach { println(it) }
         }
         init.join()
 
@@ -172,9 +207,118 @@ class MongoDbSpringDataReactivoApplication
                 adquisicionController.deleteAdquisicion(it)
             }
 
+            //Tareas
+            println("\tTareas")
+            val tarea1 = Tarea(
+                adquisicion = getAdquisicionInit()[1],
+                personalizar = getPersonalizaciones()[1],
+                usuario = usuarioController.getUsuarioById(usuariosList[9].id)!!,
+                raqueta = usuarioController.getUsuarioById(usuariosList[0].id)!!.raqueta?.get(1)
+            )
+            val tarea2 = Tarea(
+                encordar = getEncordaciones()[1],
+                usuario = usuarioController.getUsuarioById(usuariosList[9].id)!!,
+                raqueta = usuarioController.getUsuarioById(usuariosList[0].id)!!.raqueta?.get(0)
+            )
+
+            val tarea3 = Tarea(
+                adquisicion = getAdquisicionInit()[1],
+                usuario = usuarioController.getUsuarioById(usuariosList[9].id)!!
+            )
+            //Create
+            tareaController.createTarea(tarea1)
+            tareaController.createTarea(tarea2)
+            tareaController.createTarea(tarea3)
+            //FindAll
+            tareaController.getTareas().collect { println(it) }
+            //FindById
+            val tarea = tareaController.getTareaById(tarea1.id)
+            tarea?.let { println(it) }
+            //Update
+            tarea?.let {
+                it.precio += 0.20
+                tareaController.createTarea(it)
+            }
+            val tareaDelete = tareaController.getTareaById(tarea2.id)
+            tareaDelete?.let {
+                tareaController.deleteTarea(it)
+            }
+
+            //Pedidos
+            println("\tPedidos")
+            val pedido1 = Pedido(
+                estadoPedido = EstadoPedido.PROCESANDO,
+                fechaEntrada = LocalDateTime.now().toString(),
+                fechaProgramada = LocalDateTime.now().plusDays(10).toString(),
+                cliente = usuarioController.getUsuarioById(usuariosList[0].id)!!,
+                tareas = listOf(tarea1, tarea2)
+            )
+            val pedido2 = Pedido(
+                estadoPedido = EstadoPedido.PROCESANDO,
+                fechaEntrada = LocalDateTime.now().toString(),
+                fechaProgramada = LocalDateTime.now().plusDays(10).toString(),
+                cliente = usuarioController.getUsuarioById(usuariosList[0].id)!!,
+                tareas = listOf(tarea3)
+            )
+            //Create
+            pedidoController.createPedido(pedido1)
+            pedidoController.createPedido(pedido2)
+            //FindAll
+            pedidoController.getPedidos().collect { println(it) }
+            //FindById
+            val pedidoId = pedidoController.getPedidoById(pedido1.id)
+            pedidoId?.let { println(it) }
+            //Update
+            pedidoId?.let {
+                it.estadoPedido = EstadoPedido.TERMINADO
+                pedidoController.createPedido(it)
+            }
+            //Delete
+            pedidoController.deletePedido(pedido2)
+
+            //Encordadoras
+            println("\tEncordadoras")
+            //FindById
+            val encordadoraId = encordadoraController.getEncordadoraById(maquinaEncordadoraList[0].id)
+            encordadoraId?.let {
+                println(it)
+            }
+            //Update
+            encordadoraId?.let {
+                it.isManual = false
+                encordadoraController.createEncordadora(it)
+            }
+            //Delete
+            val encordadoraDelete = encordadoraController.getEncordadoraById(maquinaEncordadoraList[1].id)
+            encordadoraDelete?.let {
+                encordadoraController.deleteEncordadora(it)
+            }
+
+            //Personalizadoras
+            println("\tPersonalizadoras")
+            //FindById
+            val personalizadoraId = personalizadoraController.getPersonalizadoraById(maquinaPersonalizadoraList[0].id)
+            personalizadoraId?.let {
+                println(it)
+            }
+            //Update
+            personalizadoraId?.let {
+                it.maniobrabilidad = false
+                personalizadoraController.createPersonalizadora(it)
+            }
+            //Delete
+            val personalizadoraDelete =
+                personalizadoraController.getPersonalizadoraById(maquinaPersonalizadoraList[1].id)
+            personalizadoraDelete?.let {
+                personalizadoraController.deletePersonalizadora(it)
+            }
         }
 
         update.join()
+
+        productosListener.cancel()
+
+        exitProcess(0)
     }
 }
 

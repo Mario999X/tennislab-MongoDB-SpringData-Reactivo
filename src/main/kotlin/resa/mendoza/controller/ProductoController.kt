@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import mu.KotlinLogging
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.mongodb.core.ChangeStreamEvent
 import org.springframework.stereotype.Controller
 import resa.mendoza.models.Producto
 import resa.mendoza.repositories.ProductosRepository
@@ -41,5 +42,10 @@ class ProductoController
     suspend fun resetProductos() {
         logger.info { "Borrando productos" }
         productosRepository.deleteAll()
+    }
+
+    fun watchProductos(): Flow<ChangeStreamEvent<Producto>> {
+        logger.info { "Watch productos" }
+        return productoService.watch()
     }
 }
