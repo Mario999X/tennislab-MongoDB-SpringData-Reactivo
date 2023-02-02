@@ -16,7 +16,6 @@ import resa.mendoza.models.maquina.Encordadora
 import resa.mendoza.models.maquina.Personalizadora
 import resa.mendoza.utils.CalculoPrecioTarea
 import java.time.LocalDateTime
-import kotlin.system.exitProcess
 
 @SpringBootApplication
 class MongoDbSpringDataReactivoApplication
@@ -317,8 +316,6 @@ class MongoDbSpringDataReactivoApplication
         update.join()
 
         productosListener.cancel()
-
-        exitProcess(0)
     }
 }
 
