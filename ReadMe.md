@@ -18,9 +18,9 @@ Proyecto de gestión de base de datos de una tienda de raquetas para la asignatu
 - [Tests](#tests)
 - [Autores](#autores)
 
-## Diseño
+# Diseño
 
-# Introducción
+## Introducción
 
 Para la realización de este proyecto, se puso de requisito diseñarla usando MongoDB + Spring Data de manera reactiva.
 
@@ -29,29 +29,29 @@ problema.
 
 El primer paso fue el diseño del *diagrama de clases*, cuyo resultado final fue el siguiente:
 
-# Diagrama de clases
+## Diagrama de clases
 
 ![DiagramaClases](image/tennisLab-Reactivo.jpg)
 
 Las distintas relaciones se encuentran completamente explicadas y detalladas en la *documentación*.
 
-# Configuración del proyecto
+## Configuración del proyecto
 
 La configuración del proyecto se realizó utilizando [Gradle](https://gradle.org/); nos apoyamos en las siguientes
 tecnologías:
 
-# Configuración de la base de datos
+## Configuración de la base de datos
 
 Luego de proponer las distintas opciones de uso de MongoDB, acabamos
 eligiendo [MongoDB Atlas](https://www.mongodb.com/atlas/database), que nos permite conectarnos de manera rápida y
 sencilla.
 
-## Estructura del proyecto
+# Estructura del proyecto
 
 Para mantener el proyecto ordenado, se opto por una estructuración de clases referenciando sus
 funciones, dando como resultado los distintos paquetes como: *"Models", "Repositories"...*
 
-# Documentación
+## Documentación
 
 Las clases se encuentran documentadas con KDoc, y hemos implantado **Dokka** para poder presentar una documentación en
 formato *HTML*.
@@ -61,8 +61,8 @@ detalla el proyecto en gran medida.
 
 # Funcionamiento de la aplicación
 
-## Tests
+# Tests
 
-## Autores
+# Autores
 
 [Sebastián Mendoza](https://github.com/SebsMendoza) y [Mario Resa](https://github.com/Mario999X)
