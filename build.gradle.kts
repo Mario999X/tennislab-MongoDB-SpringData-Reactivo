@@ -11,7 +11,6 @@ plugins {
     kotlin("plugin.serialization") version "1.7.20"
     //Dokka Documentación Kotlin
     id("org.jetbrains.dokka") version "1.7.20"
-    application
 }
 
 group = "resa.mendoza"
@@ -67,45 +66,6 @@ dependencies {
 
     //Dokka Documentación Kotlin
     dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")
-}
-
-application {
-    mainClass.set("MongoDbSpringDataReactivoApplicationKt")
-}
-
-// https://stackoverflow.com/questions/34855649/invalid-signature-file-digest-for-manifest-main-attributes-exception-while-tryin
-tasks {
-    val fatJar = register<Jar>("fatJar") {
-        dependsOn.addAll(
-            listOf(
-                "compileJava",
-                "compileKotlin",
-                "processResources"
-            )
-        )
-        excludes.addAll(
-            listOf(
-                "META-INF/*.SF",
-                "META-INF/*.DSA",
-                "META-INF/*.RSA"
-            )
-        )// We need this for Gradle optimization to work
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        manifest { attributes(mapOf("Main-Class" to application.mainClass)) } // Provided we set it up in the application plugin configuration
-        val sourcesMain = sourceSets.main.get()
-        val contents = configurations.runtimeClasspath.get()
-            .map { if (it.isDirectory) it else zipTree(it) } +
-                sourcesMain.output
-        from(contents)
-    }
-    build {
-        dependsOn(fatJar) // Trigger fat jar creation during build
-    }
-}
-tasks.withType<Jar> {
-    manifest {
-        attributes["Main-Class"] = "MainKt"
-    }
 }
 
 tasks.withType<KotlinCompile> {
