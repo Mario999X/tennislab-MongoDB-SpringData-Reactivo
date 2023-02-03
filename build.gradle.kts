@@ -35,6 +35,8 @@ dependencies {
         exclude(module = "mockito-core")
     }
     testImplementation("io.projectreactor:reactor-test")
+    // corrutinas-Test
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
 
     // Mockk
     testImplementation("com.ninja-squad:springmockk:4.0.0")
