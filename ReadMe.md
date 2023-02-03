@@ -84,11 +84,11 @@ Contamos con una única clase principal de ejecución, *MongoDbSpringDataReactiv
 ## MongoDbSpringDataReactivoApplication
 
 Contamos con una funcion main que será la que se ejecute, mientras, la clase, además de tener inyectados los
-controladores en el constructor, tiene implementado **CommandLineRunner**. 
+controladores en el constructor, tiene implementado **CommandLineRunner**.
 
-Dentro, en el método *run*, se ejecuta la lógica principal del programa. Generamos una serie de listas que 
-se encargaran de guardar la futura información que, generalmente tendremos preparada en un archivo *Data*, 
-en el fichero *db*. Cargamos los datos, y eliminamos los datos de las distintas colecciones para tener únicamente 
+Dentro, en el método *run*, se ejecuta la lógica principal del programa. Generamos una serie de listas que
+se encargaran de guardar la futura información que, generalmente tendremos preparada en un archivo *Data*,
+en el fichero *db*. Cargamos los datos, y eliminamos los datos de las distintas colecciones para tener únicamente
 los datos de la ejecución actual.
 
 Luego, preparamos los *escuchadores* de la colección de **productos**, y realizaremos las distintas operaciones CRUD.
@@ -110,8 +110,8 @@ los cambios sobre la base de datos.
 
 # Tests
 
-Hemos realizado los test tanto de controladores como de los repositorios relacionados con la cache y el servicio externo,
-haciendo uso de Mockk y JUnit5, además, son test que permiten la actuación de corrutinas.
+Hemos realizado los test tanto de controladores como de los repositorios haciendo uso de Mockk y JUnit5,
+además, son test que permiten la actuación de corrutinas.
 
 # Autores
 
