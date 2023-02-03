@@ -110,6 +110,9 @@ los cambios sobre la base de datos.
 
 # Tests
 
+Hemos realizado los test tanto de controladores como de los repositorios relacionados con la cache y el servicio externo,
+haciendo uso de Mockk y JUnit5, además, son test que permiten la actuación de corrutinas.
+
 # Autores
 
 [Sebastián Mendoza](https://github.com/SebsMendoza) y [Mario Resa](https://github.com/Mario999X)
