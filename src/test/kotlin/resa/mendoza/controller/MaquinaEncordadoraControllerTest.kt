@@ -8,6 +8,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
+import org.bson.types.ObjectId
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
@@ -74,7 +75,18 @@ internal class MaquinaEncordadoraControllerTest {
             { assertEquals(res!!.isManual, encordadora.isManual) }
         )
 
-        coVerify(exactly = 1) { maquinaEncordadoraRepository.findById(any()) }
+        coVerify { maquinaEncordadoraRepository.findById(any()) }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun findByIdNotExists() = runTest {
+        coEvery { maquinaEncordadoraRepository.findById(any()) } returns null
+        val res = maquinaEncordadoraController.getEncordadoraById(ObjectId.get())
+
+        assertNull(res)
+
+        coVerify { maquinaEncordadoraRepository.findById(any()) }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

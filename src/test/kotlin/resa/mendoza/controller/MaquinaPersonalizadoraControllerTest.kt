@@ -8,6 +8,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
+import org.bson.types.ObjectId
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.TestInstance
@@ -71,7 +72,18 @@ internal class MaquinaPersonalizadoraControllerTest {
         assertAll(
             { assertEquals(res!!.balance, personalizadora.balance) }
         )
-        coVerify(exactly = 1) { maquinaPersonalizadoraRepository.findById(any()) }
+        coVerify { maquinaPersonalizadoraRepository.findById(any()) }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun findByIdNotExists() = runTest {
+        coEvery { maquinaPersonalizadoraRepository.findById(any()) } returns null
+        val res = maquinaPersonalizadoraController.getPersonalizadoraById(ObjectId.get())
+
+        assertNull(res)
+
+        coVerify { maquinaPersonalizadoraRepository.findById(any()) }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

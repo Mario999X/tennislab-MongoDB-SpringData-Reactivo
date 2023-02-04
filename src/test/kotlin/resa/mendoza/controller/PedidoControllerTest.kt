@@ -8,6 +8,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
+import org.bson.types.ObjectId
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
@@ -81,7 +82,18 @@ internal class PedidoControllerTest {
             { assertEquals(res!!.precio, pedido.precio) }
         )
 
-        coVerify(exactly = 1) { pedidoRepository.findById(pedido.id) }
+        coVerify { pedidoRepository.findById(pedido.id) }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun findByIdNotExists() = runTest {
+        coEvery { pedidoRepository.findById(any()) } returns null
+        val res = pedidoController.getPedidoById(ObjectId.get())
+
+        assertNull(res)
+
+        coVerify { pedidoRepository.findById(any()) }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

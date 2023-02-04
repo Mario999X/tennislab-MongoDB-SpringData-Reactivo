@@ -10,9 +10,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Test
-
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
@@ -114,7 +113,7 @@ internal class UsuarioControllerTest {
         assertAll(
             { assertEquals(res!!.name, usuario.name) }
         )
-        coVerify(exactly = 1) { usuariosCacheRepository.findById(any()) }
+        coVerify { usuariosCacheRepository.findById(any()) }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

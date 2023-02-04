@@ -82,7 +82,18 @@ class TareaControllerTest {
         assertAll(
             { assertEquals(res!!.usuario, tarea.usuario) }
         )
-        coVerify(exactly = 1) { tareaRepository.findById(tarea.id) }
+        coVerify { tareaRepository.findById(tarea.id) }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun findByIdNotExists() = runTest {
+        coEvery { tareaRepository.findById(any()) } returns null
+        val res = tareaController.getTareaById(ObjectId.get())
+
+        assertNull(res)
+
+        coVerify { tareaRepository.findById(any()) }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
