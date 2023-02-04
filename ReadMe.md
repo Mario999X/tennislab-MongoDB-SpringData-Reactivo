@@ -8,7 +8,7 @@ Proyecto de gestión de base de datos de una tienda de raquetas para la asignatu
 
 ## [Versión MongoDB](https://github.com/SebsMendoza/tennislab-MongoDB-Reactivo)
 
-## [Vídeo de presentación]
+## [Vídeo de presentación](https://drive.google.com/file/d/1t5Ej6MHjNCIeplbAkRsKT6Zlpt_ALiTV/view?usp=share_link)
 
 ## Índice
 
